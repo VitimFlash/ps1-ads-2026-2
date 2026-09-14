@@ -17,9 +17,8 @@ import dr.edu.fatecfranca.api.entities.Car;
 import dr.edu.fatecfranca.api.repositories.CarRepository;
 
 @RestController
-@RequestMapping("/car")
+@RequestMapping("/cars")
 public class CarController {
-
 private final CarRepository repository;
 
  public CarController(CarRepository repository) {

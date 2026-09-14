@@ -26,7 +26,7 @@ public class Car {
    private String color;
 
    @Column(name = "year_manufacture", nullable = false)
-   private Long year_manufacture;
+   private Integer year_manufacture;
 
    @Column(name = "imported", nullable = false)
    private Boolean imported;
@@ -75,11 +75,11 @@ public class Car {
     this.color = color;
    }
 
-   public Long getYear_manufacture() {
+   public Integer getYear_manufacture() {
     return year_manufacture;
    }
 
-   public void setYear_manufacture(Long year_manufacture) {
+   public void setYear_manufacture(Integer year_manufacture) {
     this.year_manufacture = year_manufacture;
    }
 
