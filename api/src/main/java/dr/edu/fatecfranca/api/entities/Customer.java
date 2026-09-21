@@ -1,6 +1,7 @@
 package dr.edu.fatecfranca.api.entities;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
@@ -10,6 +11,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.OneToMany;
+
 
 @Entity
 @Table(name = "customers")
@@ -52,6 +55,9 @@ public class Customer {
    @JdbcTypeCode(SqlTypes.CHAR)
    @Column(nullable = false, length = 2, columnDefinition = "CHAR(2)")
    private String state;
+
+   @OneToMany(mappedBy = "customer")
+   private List<Car> cars;
 
    
    public Long getId() {
@@ -139,5 +145,14 @@ public class Customer {
    }
 
    public Customer() {
+   }
+
+   public List<Car> getCars() {
+       return cars;
+   }
+
+
+   public void setCars(List<Car> cars) {
+       this.cars = cars;
    }
 }

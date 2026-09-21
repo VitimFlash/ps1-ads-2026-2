@@ -6,6 +6,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
@@ -40,8 +42,12 @@ public class Car {
    @Column(name = "selling_price", precision = 12, scale = 2)
    private BigDecimal sellingPrice;
 
-   @Column(name = "customer_id", nullable = false)
-   private Long customer_id;
+   //@Column(name = "customer_id", nullable = false)
+   //private Long customer_id;
+
+   @ManyToOne
+   @JoinColumn(name = "customer_id")
+   private Customer customer;
 
    public Long getId() {
     return id;
@@ -115,11 +121,22 @@ public class Car {
     this.sellingPrice = sellingPrice;
    }
 
-   public Long getCustomer_id() {
-    return customer_id;
+   //public Long getCustomer_id() {
+    //return customer_id;
+   //}
+
+   //public void setCustomer_id(Long customer_id) {
+    //this.customer_id = customer_id;
+   //}
+
+   // customerId agora é obtido a partir do relacionamento
+   public Long getCustomerId() {
+    return customer != null ? customer.getId() : null;
    }
 
-   public void setCustomer_id(Long customer_id) {
-    this.customer_id = customer_id;
+
+   public void setCustomer(Customer customer) {
+    this.customer = customer;
    }
+
 }
