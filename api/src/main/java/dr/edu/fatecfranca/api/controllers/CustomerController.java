@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import dr.edu.fatecfranca.api.dtos.CustomerRequest;
 import dr.edu.fatecfranca.api.entities.Customer;
 import dr.edu.fatecfranca.api.services.CustomerService;
 import dr.edu.fatecfranca.api.repositories.CustomerRepository;
@@ -42,8 +43,8 @@ public class CustomerController {
     // }
 
     @PostMapping
-    public ResponseEntity<Customer> create(@RequestBody Customer customer) {
-       Customer savedCustomer = service.create(customer);
+    public ResponseEntity<Customer> create(@RequestBody CustomerRequest request) {
+       Customer savedCustomer = service.create(request);
        return ResponseEntity
                .status(HttpStatus.CREATED)
                .body(savedCustomer);
@@ -69,12 +70,13 @@ public class CustomerController {
    @PutMapping("/{id}")
    public ResponseEntity<Customer> update(
            @PathVariable Long id,
-           @RequestBody Customer customer) {
+           @RequestBody CustomerRequest request) {
        if (!service.existsById(id)) {
            return ResponseEntity.notFound().build();
        }
-       customer.setId(id);
-       return ResponseEntity.ok(service.update(customer));
+          Customer customer = service.update(id, request);
+          customer.setId(id);
+          return ResponseEntity.ok(customer);
    }
   
    // @DeleteMapping("/{id}")
