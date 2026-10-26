@@ -10,33 +10,33 @@ import jakarta.validation.constraints.Positive;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public record CarRequest (
+public record CarRequest(
 
     @NotBlank(message = "A marca é obrigatória.")
-    private String brand;
+    String brand,
 
     @NotBlank(message = "O modelo é obrigatório.")
-    private String model;
+    String model,
 
     @NotBlank(message = "A cor é obrigatória.")
-    private String color;
+    String color,
 
     @NotNull(message = "O ano de fabricação é obrigatório.")
     @Positive(message = "O ano de fabricação deve ser maior que zero.")
-    private Integer yearManufacture;
+    Integer yearManufacture,
 
     @NotNull(message = "É obrigatório informar se o carro é importado.")
-    private Boolean imported;
+    Boolean imported,
 
     @NotBlank(message = "A placa é obrigatória.")
     @Pattern(
         regexp = "([A-Z]{3}-[0-9]{4}|[A-Z]{3}[0-9][A-Z][0-9]{2})",
         message = "A placa deve seguir o formato ABC-1234 ou ABC1D23."
     )
-    private String plates;
+    String plates,
 
     @PastOrPresent(message = "A data de venda não pode estar no futuro.")
-    private LocalDate sellingDate;
+    LocalDate sellingDate,
 
     @Positive(message = "O preço de venda deve ser maior que zero.")
     @Digits(
@@ -44,10 +44,9 @@ public record CarRequest (
         fraction = 2,
         message = "O preço deve ter até 10 dígitos inteiros e 2 decimais."
     )
-    private BigDecimal sellingPrice;
+    BigDecimal sellingPrice,
 
     @Positive(message = "O ID do cliente deve ser maior que zero.")
-    private Long customerId;
+    Long customerId
+
 ) {}
-
-

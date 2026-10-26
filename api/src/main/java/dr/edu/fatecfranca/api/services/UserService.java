@@ -5,16 +5,50 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import dr.edu.fatecfranca.api.dtos.UserRequest;
 import dr.edu.fatecfranca.api.entities.User;
 import dr.edu.fatecfranca.api.repositories.UserRepository;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
+import dr.edu.fatecfranca.api.dtos.LoginRequest;
+
 @Service
 public class UserService {
-
    private final UserRepository repository;
+   private final PasswordEncoder passwordEncoder;
 
-   public UserService(UserRepository repository) {
+   public UserService(UserRepository repository, PasswordEncoder passwordEncoder) {
        this.repository = repository;
+       this.passwordEncoder = passwordEncoder;
+   }
+
+   private void copyToEntity(UserRequest request, User user) {
+       user.setFullname(request.fullname());
+       user.setUsername(request.username());
+       user.setEmail(request.email());
+       // passwordEncoder gera o hash para a senha recebida
+       user.setPassword(passwordEncoder.encode(request.password()));
+       user.setIsAdmin(Boolean.TRUE.equals(request.isAdmin()));
+   }
+
+   public Optional<User> authenticate(LoginRequest request) {
+       String usernameOrEmail = request.usernameOrEmail().strip();
+       Optional<User> result =
+               repository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail);
+       if (result.isEmpty()) {
+           return Optional.empty();
+       }
+       User user = result.get();
+       // Neste ponto ocorre a comparação entre os hashes da senha
+       // digitada e da senha cadastrada
+       boolean validPassword = passwordEncoder.matches(
+           request.password(),
+           user.getPassword()
+       );
+       if (!validPassword) {
+           return Optional.empty();
+       }
+       return Optional.of(user);
    }
 
    public User create(User user) {
