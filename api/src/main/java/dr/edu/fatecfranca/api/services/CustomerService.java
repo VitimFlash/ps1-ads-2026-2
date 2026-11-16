@@ -9,11 +9,16 @@ import dr.edu.fatecfranca.api.dtos.CustomerRequest;
 import dr.edu.fatecfranca.api.entities.Customer;
 import dr.edu.fatecfranca.api.repositories.CustomerRepository;
 
+import dr.edu.fatecfranca.api.validators.RequestValidator;
+import dr.edu.fatecfranca.api.validators.StateValidator;
+import dr.edu.fatecfranca.api.validators.UniqueDocumentValidator;
+import dr.edu.fatecfranca.api.validators.UniqueEmailValidator;
 
 @Service
 public class CustomerService {
 
    private final CustomerRepository repository;
+   private final RequestValidator validator;
 
 private void copyToEntity(CustomerRequest request,Customer customer) {
 
@@ -32,9 +37,19 @@ private void copyToEntity(CustomerRequest request,Customer customer) {
 
    public CustomerService(CustomerRepository repository) {
        this.repository = repository;
+
+       RequestValidator emailValidator =
+           new UniqueEmailValidator(repository, null);
+
+       RequestValidator documentValidator = 
+           new UniqueDocumentValidator(repository, emailValidator);
+
+       this.validator = new StateValidator(documentValidator);
    }
 
-   public Customer create(CustomerRequest request) {Customer customer = new Customer();
+   public Customer create(CustomerRequest request) {
+       validator.validate(request, null);
+       Customer customer = new Customer();
        copyToEntity(request, customer);
 
        return repository.save(customer);
@@ -48,7 +63,9 @@ private void copyToEntity(CustomerRequest request,Customer customer) {
        return repository.findById(id);
    }
 
-   public Customer update(Long id, CustomerRequest request) {Customer customer = new Customer();
+   public Customer update(Long id, CustomerRequest request) {
+       validator.validate(request, id);
+       Customer customer = new Customer();
        copyToEntity(request, customer);
 
        customer.setId(id);

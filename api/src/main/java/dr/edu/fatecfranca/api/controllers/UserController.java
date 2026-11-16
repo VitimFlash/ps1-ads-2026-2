@@ -25,7 +25,6 @@ import dr.edu.fatecfranca.api.dtos.UserResponse;
 import dr.edu.fatecfranca.api.dtos.LoginResponse;
 import dr.edu.fatecfranca.api.services.TokenService;
 
-
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -38,7 +37,6 @@ public class UserController {
        this.tokenService = tokenService;
    }
 
-
    @PostMapping
    public ResponseEntity<UserResponse> create(
            @RequestBody UserRequest request) {
@@ -50,11 +48,9 @@ public class UserController {
                .body(new UserResponse(savedUser));
    }
 
-
     @PostMapping("/login")
    public ResponseEntity<LoginResponse> login(
            @Valid @RequestBody LoginRequest request) {
-
 
        return service.authenticate(request)
            .map(user -> new LoginResponse(
